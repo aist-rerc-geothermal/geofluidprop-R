@@ -1,0 +1,18 @@
+Package: geofluidprop
+Type: Package
+Title: geofluidprop
+Version: 1.0
+Date: 2022-12-06
+Author: Norihiro Watanabe
+Maintainer: Norihiro Watanabe <norihiro.watanabe@aist.go.jp>
+Description: R package for geofluidprop for computing physical properties of geological fluids
+License: GPL (>= 3)
+Imports:
+Depends:    R (>= 3.0.0)
+LinkingTo:
+RoxygenNote: 7.2.2
+Encoding: UTF-8
+Suggests: testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
