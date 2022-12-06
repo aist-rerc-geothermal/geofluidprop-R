@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2022-12-06
 Author: Norihiro Watanabe
 Maintainer: Norihiro Watanabe <norihiro.watanabe@aist.go.jp>
-Description: A library to compute physical properties of geological fluids
+Description: R package for geofluidprop for computing physical properties of geological fluids
 License: GPL (>= 3)
 Imports:
 Depends:    R (>= 3.0.0)
