@@ -16,7 +16,7 @@ all: $(SHLIB)
 $(SHLIB): $(OBJECTS) geofluidprop
 
 geofluidprop:
-	(cd lib; $(MAKE))
+	(cd lib; CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" MAKE="$(MAKE) -f \"$(MkInclude)\" -f Makefile" $(MAKE) -f "$(MkInclude)" -f Makefile)
 
 #SUBLIBS = $(SUBDIRS:=.a)
 #$(warning SUBLIBS = $(SUBLIBS))

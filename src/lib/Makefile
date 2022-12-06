@@ -10,6 +10,7 @@ library:
 COPTS		= -O2
 #WARN        = -Wall -Wno-unknown-pragmas
 #WARN        = -Wno-unknown-pragmas
+INCDIR      = 
 INCDIR      = -I./geofluidprop/src
 CFLAGS		= $(COPTS) $(WARN) $(INCDIR)  -std=gnu99
 LLIBS		= -lm
@@ -20,6 +21,8 @@ SOURCES := $(filter-out $(wildcard ./geofluidprop/src/model/*/*_prost*), $(SOURC
 #SOURCES := $(filter-out $(wildcard src/interface/*.* src/spline/*.* src/sbtl/*.*),$(SOURCES))
 $(warning SOURCES = $(SOURCES))
 OBJS = $(SOURCES:.c=.o)
+
+#$(info        PWD = $(shell pwd)  )
 
 LIB = libgeofluidprop.a
 
