@@ -1,14 +1,3 @@
-#' geofluidprop
-#' 
-#' R package to geofluidprop
-#' 
-#' @docType package
-#' @author Norihiro Watanabe
-#' @useDynLib geofluidprop
-#' @exportPattern "^[[:alpha:]]+"
-#' @name geofluidprop
-NULL
-
  #' C-like printf
  #' 
  #' @param ... arguments

@@ -204,7 +204,7 @@ H2ONaCl_ec_WatanabeEtAl2021_Tpm <- function(TK, pMPa, m)
   #   return(NA)
   # }
   rho = driesner07_H2O_NaCl_rho_singlephase_pTx(pMPa*1e6, TK, x)
-  vis = klyukinetal2017_viscosity(rho, TK, x)
+  vis = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(rho, TK, x)
   ms = H2ONaCl_molar_ec_WatanabeEtAl2021_vism(vis, m)
   if (ms<=0) return(1e-6)
   M = H2ONaCl_b_to_M(m, rho)
