@@ -1,35 +1,46 @@
 
 PKG_CFLAGS = -I./lib/geofluidprop/src 
 PKG_LIBS = -L./lib -lgeofluidprop
-#PKG_LIBS = -L./lib -lgeofluidprop -lm
-#PKG_LIBS = -L./eoslib -leos -lm
 MkInclude = $(R_HOME)/etc${R_ARCH}/Makeconf
+C_STD = C99
 
-SOURCES = $(wildcard *.c)
+SOURCES = \
+	rinit.c\
+	rwrap_driesner07.c\
+	rwrap_iapws95.c\
+	rwrap_klyukinetal2017.c
 #SOURCES := $(filter-out $(wildcard src/**/test*.c src/**/**/test*.c),$(SOURCES))
-$(warning SOURCES = $(SOURCES))
+#$(warning SOURCES = $(SOURCES))
+
 OBJECTS = $(SOURCES:.c=.o)
 
-.PHONY: all mylibs
+SUBDIRS = lib
+
+.PHONY: all geofluidprop
 
 all: $(SHLIB)
-$(SHLIB): $(OBJECTS) geofluidprop
+$(SHLIB): $(OBJECTS) lib/libgeofluidprop.a
 
-geofluidprop:
-	(cd lib; CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" MAKE="$(MAKE) -f \"$(MkInclude)\" -f Makefile" $(MAKE) -f "$(MkInclude)" -f Makefile)
+lib/libgeofluidprop.a:
+	(cd lib; CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" MAKE="$(MAKE) -f \"$(MkInclude)\" -f Makefile" $(MAKE) -f "$(MkInclude)" -f Makefile library)
+#	(cd $${d} && CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" MAKE="$(MAKE) -f \"$(MkInclude)\" -f Makefile" $(MAKE) -f "$(MkInclude)" -f Makefile library) || exit 1; 
+#	(cd lib; CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" MAKE="$(MAKE) -f \"$(MkInclude)\" -f Makefile" $(MAKE) -f "$(MkInclude)" -f Makefile)
 
-#SUBLIBS = $(SUBDIRS:=.a)
+# SUBLIBS = geofluidprop.a
 #$(warning SUBLIBS = $(SUBLIBS))
-#all: $(SHLIB)
-## making src/*.o and in sublibs can be done simultaneously
-# for development:
-#$(SHLIB): $(OBJECTS) sublibraries
-# for real:
-#$(SHLIB): geofluidprop
+
+# all: $(SHLIB)
+
+# # # making src/*.o and in sublibs can be done simultaneously
+# # for development:
+# # $(SHLIB): $(OBJECTS) sublibraries
+# # for real:
+# $(SHLIB): $(OBJECTS) $(SUBLIBS)
 
 #geofluidprop:
 #	(cd geofluidprop; $(MAKE))
-#sublibs: subclean sublibraries
+
+# SUBLIBS: subclean sublibraries
 
 # sublibraries: subclean
 # 	@for d in $(SUBDIRS); do \
