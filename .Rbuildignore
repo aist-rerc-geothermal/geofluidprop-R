@@ -7,3 +7,4 @@ createRd4swigfunctions.R
 ^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github$

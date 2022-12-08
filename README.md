@@ -1,5 +1,11 @@
-# R package for the `geofluidprop` library
-R package for [`geofluidprop`](https://github.com/aist-rerc-geothermal/geofluidprop), that is a C/C++ library for computing physical properties of geological fluids (currently we support only water and H<sub>2</sub>O-NaCl fluids)
+# The geofluidprop R package: a wrapper for the geofluidprop C library
+================
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/aist-rerc-geothermal/geofluidprop-R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aist-rerc-geothermal/geofluidprop-R/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+  
+This is an R wrapper for [`geofluidprop`](https://github.com/aist-rerc-geothermal/geofluidprop), that is a C/C++ library for computing physical properties of geological fluids (currently we support only water and H<sub>2</sub>O-NaCl fluids).
 
 ## Installation
 
@@ -43,5 +49,4 @@ H<sub>2</sub>ONaCl_ec_WatanabeEtAl2021_Tpm(TK=273.15+200, pMPa=10, m=H<sub>2</su
 
 
 ### To know more:
-geofluidprop: https://github.com/aist-rerc-geothermal/geofluidprop
-R-package for geofluidprop: https://github.com/aist-rerc-geothermal/geofluidprop-R
+geofluidprop: https://github.com/aist-rerc-geothermal/geofluidprop  
