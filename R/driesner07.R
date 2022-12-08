@@ -71,7 +71,7 @@ driesner07_H2O_NaCl_Tc_x <- function(x)
 #' @export
 driesner07_H2O_NaCl_phase_Tpx <- function(TK,p,x)
 {
-  ret <- .C("R_driesner07_H2O_NaCl_phase_pTx", p=as.double(p), TK=as.double(TK), x=as.double(x), phaseid = as.integer(0))
+  ret <- .C("R_driesner07_H2O_NaCl_phase_type_pTx", p=as.double(p), TK=as.double(TK), x=as.double(x), phaseid = as.integer(0))
   if (ret$phaseid == 0) return("V")
   if (ret$phaseid == 1) return("VH")
   if (ret$phaseid == 10) return("L")

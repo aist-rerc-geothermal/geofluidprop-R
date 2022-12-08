@@ -24,7 +24,7 @@ void R_driesner07_H2O_NaCl_xc_T(double*T, double*out)
   *out = driesner07_H2O_NaCl_xc_T(*T);
 }
 
-void R_driesner07_H2O_NaCl_phase_pTx(double*p, double*T, double*x, int*out)
+void R_driesner07_H2O_NaCl_phase_type_pTx(double*p, double*T, double*x, int*out)
 {
   *out = driesner07_H2O_NaCl_phase_type(*p, *T, *x);
 }

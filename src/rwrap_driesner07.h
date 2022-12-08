@@ -6,7 +6,7 @@ void R_driesner07_H2O_NaCl_pc_T(double*T, double*out);
 void R_driesner07_H2O_NaCl_pc_T2(double*T, double*out);
 void R_driesner07_H2O_NaCl_Tc_x(double*x, double*out);
 void R_driesner07_H2O_NaCl_xc_T(double*T, double*out);
-void R_driesner07_H2O_NaCl_phase_pTx(double*p, double*T, double*x, int*out);
+void R_driesner07_H2O_NaCl_phase_type_pTx(double*p, double*T, double*x, int*out);
 void R_driesner07_H2O_NaCl_VL_xl_pT(double*p, double*T, double*out);
 void R_driesner07_H2O_NaCl_VL_xv_pT(double*p, double*T, double*out);
 void R_driesner07_H2O_NaCl_VL_rhov_pT(double*p, double*T, double*out);
