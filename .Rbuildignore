@@ -5,3 +5,5 @@ createRd4swigfunctions.R
 ^.*\.a
 ^.vscode
 ^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
