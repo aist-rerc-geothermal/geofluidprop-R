@@ -1,0 +1,10 @@
+
+set(TMP_SOURCES
+    test_util.c)
+
+list(TRANSFORM TMP_SOURCES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+
+set(SOURCES
+    ${SOURCES}
+    ${TMP_SOURCES}
+    PARENT_SCOPE)
