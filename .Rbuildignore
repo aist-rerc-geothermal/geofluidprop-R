@@ -1,10 +1,15 @@
 ^doc$
 ^Meta$
-createRd4swigfunctions.R
+^utils_for_package_build\.R$
 ^.*\.o
 ^.*\.a
-^.vscode
+^.vscode$
 ^LICENSE\.md$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github$
+^\.gitignore$
+^\.git$
+^src/lib/geofluidprop/scripts$
+^src/lib/geofluidprop/third-party$
+
