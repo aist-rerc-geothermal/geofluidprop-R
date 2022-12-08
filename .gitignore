@@ -11,3 +11,5 @@ inst/extdata/*
 !inst/extdata/*.tex
 /doc/
 /Meta/
+*.o
+*.a
