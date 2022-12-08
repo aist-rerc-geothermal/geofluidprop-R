@@ -11,3 +11,4 @@ inst/extdata/*
 !inst/extdata/*.tex
 /doc/
 /Meta/
+/src/lib/*.a
