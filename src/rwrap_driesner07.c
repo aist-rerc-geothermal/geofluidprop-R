@@ -99,7 +99,7 @@ void R_driesner07_H2O_NaCl_rho_pTx(double*p, double*T, double*x, double*out)
   *out = driesner07_H2O_NaCl_rho_pTx(*p, *T, *x);
 }
 
-void R_driesner07_H2O_NaCl_singlephase_rho_pTx(double*p, double*T, double*x, double*out)
+void R_driesner07_H2O_NaCl_rho_singlephase_pTx(double*p, double*T, double*x, double*out)
 {
   *out = driesner07_H2O_NaCl_rho_singlephase_pTx(*p, *T, *x);
 }

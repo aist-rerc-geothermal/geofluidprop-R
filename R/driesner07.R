@@ -314,7 +314,7 @@ driesner07_H2O_NaCl_VH_xv_Tp <- function(TK, p)
 driesner07_H2O_NaCl_VH_vol_frac_h = function(TK,p,x)
 {
   xv = driesner07_H2O_NaCl_VH_xv_Tp(TK,p)
-  rhov = driesner07_H2O_NaCl_singlephase_rho_Tpx(TK,p,xv)
+  rhov = driesner07_H2O_NaCl_rho_singlephase_pTx(p, TK,xv)
   rhoh = 2163
   X = H2ONaCl_x_to_massfrac(x)
   Xv = H2ONaCl_x_to_massfrac(xv)
@@ -366,9 +366,9 @@ driesner07_H2O_NaCl_rho_pTx <- function(p, TK, x)
 #' @return Density [kg/m3]
 #'
 #' @export
-driesner07_H2O_NaCl_singlephase_rho_pTx <- function(p, TK, x)
+driesner07_H2O_NaCl_rho_singlephase_pTx <- function(p, TK, x)
 {
-  ret <- .C("R_driesner07_H2O_NaCl_singlephase_rho_pTx", p=as.double(p), TK=as.double(TK), x=as.double(x), out=as.double(1.0))
+  ret <- .C("R_driesner07_H2O_NaCl_rho_singlephase_pTx", p=as.double(p), TK=as.double(TK), x=as.double(x), out=as.double(1.0))
   return(ret$out)
 }
 
@@ -403,7 +403,7 @@ driesner07_H2O_NaCl_singlephase_h_Tpx <- function(TK, p, x)
 #' @export
 driesner07_H2O_NaCl_singlephase_p_rhoTx = function(rho, TK, x, pVL, pmax=500e6)
 {
-  ff = function(p) driesner07_H2O_NaCl_singlephase_rho_Tpx(TK, p, x) - rho  
+  ff = function(p) driesner07_H2O_NaCl_rho_singlephase_pTx(p, TK, x) - rho  
   ret = uniroot(ff, lower=pVL, upper=pmax)
   ret$root
 }

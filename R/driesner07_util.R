@@ -10,7 +10,7 @@
  #' @export
  driesner07_H2O_NaCl_phase_name_Tpx <- function(TK,p,x)
  {
-   phaseid = driesner07_H2O_NaCl_phase_type(p, TK, x)
+   phaseid = driesner07_H2O_NaCl_phase_Tpx(TK, p, x)
    if (phaseid == 0) return("V")
    if (phaseid == 1) return("VH")
    if (phaseid == 10) return("L")
