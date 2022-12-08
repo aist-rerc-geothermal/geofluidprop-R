@@ -4,3 +4,4 @@ createRd4swigfunctions.R
 ^.*\.o
 ^.*\.a
 ^.vscode
+^LICENSE\.md$
