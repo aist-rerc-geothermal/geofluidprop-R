@@ -72,7 +72,7 @@ search_intervals = function(f, p0, p1, n = 100)
 {
   dat = data.frame(p = seq(p0, p1, length.out = n))
   dat$f = mapply(f, dat$p)
-  dat = filter(dat, !is.na(f))
+  dat = dplyr::filter(dat, !is.na(f))
 
   sign0 = dat$f[1]
   if (is.na(sign0)) {
@@ -214,6 +214,8 @@ driesner07_H2O_NaCl_VLH_T_xv = function(xv)
 #'
 #' @return dataframe object including calculated TK and p values
 #'
+#' @importFrom dplyr select filter
+#' @importFrom rlang .data
 #' @export
 driesner07_H2O_NaCl_get_Tp_curve_on_F_VL_boundary = function(massfrac_NaCl, TCmax)
 {
@@ -237,7 +239,7 @@ driesner07_H2O_NaCl_get_Tp_curve_on_F_VL_boundary = function(massfrac_NaCl, TCma
   #printf("-> condensation curve\n")
   dat = data.frame(TK=seq(Tc+0.01, toK(TCmax), length.out = 100))
   dat$xv_VLH = mapply(driesner07_H2O_NaCl_VLH_xv_T, dat$TK)
-  dat = filter(dat, xv_VLH <= x)
+  dat = dplyr::filter(dat, .data$xv_VLH <= x)
   if (nrow(dat)>0)
   {
     if (!is.na(TK_VLH))
@@ -252,9 +254,9 @@ driesner07_H2O_NaCl_get_Tp_curve_on_F_VL_boundary = function(massfrac_NaCl, TCma
 
     # draw lower curve
     dat$p = mapply(function(TK,x)driesner07_H2O_NaCl_VL_pv_Tx(TK,x)[1], dat$TK, x)
-    dat2 = filter(dat, !is.na(p))
+    dat2 = dplyr::filter(dat, !is.na(.data$p))
     if (nrow(dat2)>0) {
-      dall = rbind(dall, select(dat2, TK, p))
+      dall = rbind(dall, dplyr::select(dat2, .data$TK, .data$p))
     }
 
     # draw upper curve
@@ -262,14 +264,14 @@ driesner07_H2O_NaCl_get_Tp_curve_on_F_VL_boundary = function(massfrac_NaCl, TCma
     {
       dat2 = dat
       dat2$p = mapply(function(TK,x)driesner07_H2O_NaCl_VL_pv_Tx(TK,x)[2], dat$TK, x)
-      dat2 = filter(dat2, !is.na(p))
+      dat2 = dplyr::filter(dat2, !is.na(.data$p))
       if (nrow(dat2)>0)
       {
-        dall = rbind(dall, select(dat2, TK, p))
+        dall = rbind(dall, dplyr::select(dat2, .data$TK, .data$p))
 
         # fill gap
-        dat_min = filter(dat, TK==min(dat$TK))
-        dat2_min = filter(dat2, TK==min(dat2$TK))
+        dat_min = dplyr::filter(dat, .data$TK==min(dat$TK))
+        dat2_min = dplyr::filter(dat2, .data$TK==min(dat2$TK))
         dat3 = rbind(dat_min, dat2_min)
       }
     }
@@ -285,6 +287,8 @@ driesner07_H2O_NaCl_get_Tp_curve_on_F_VL_boundary = function(massfrac_NaCl, TCma
 #'
 #' @return dataframe object including calculated TK and p values
 #'
+#' @importFrom dplyr select
+#' @importFrom rlang .data
 #' @export
 driesner07_H2O_NaCl_get_Tp_curve_on_VL_VH_boundary = function(TCmax, n=50)
 {
@@ -293,7 +297,7 @@ driesner07_H2O_NaCl_get_Tp_curve_on_VL_VH_boundary = function(TCmax, n=50)
   dat$p = mapply(driesner07_H2O_NaCl_VLH_p_T, dat$TK)
   dat$xv = mapply(driesner07_H2O_NaCl_VLH_xv_T, dat$TK)
   dat$wtp = mapply(H2ONaCl_x_to_massfrac, dat$xv) * 1e2
-  select(dat, TK, p)
+  dplyr::select(dat, .data$TK, .data$p)
 }
 
 #' get information about H2O-NaCl phase relation at the given NaCl mass fraction, based on Driesner & Heinrich (2007)
@@ -330,20 +334,45 @@ driesner07_H2O_NaCl_get_phase_relation_on_Tp_space = function(massfrac_NaCl, TC_
 #' @param dat H2O-NaCl phase relation information
 #' @param TC_range_max Maximum temperature to be plotted [K]
 #'
+#' @importFrom ggplot2 ggplot aes geom_line geom_point coord_cartesian xlab ylab ggtitle
 #' @export
 driesner07_H2O_NaCl_plot_phase_relation_on_Tp_space = function(dat, TC_range_max = 800)
 {
-  g = ggplot()
-  g = g + geom_line(data=dat$boundary_LV_VH, aes(x=toC(TK), y=p*1e-6))
+  g = ggplot2::ggplot()
+  g = g + ggplot2::geom_line(data=dat$boundary_LV_VH, ggplot2::aes(x=toC(TK), y=p*1e-6))
   #g = g + geom_point(data=dat$boundary_LV_VH, aes(x=toC(TK), y=p*1e-6), size=1)
-  g = g + geom_line(data=dat$boundary_F_LV, aes(x=toC(TK), y=p*1e-6), color="blue")
+  g = g + ggplot2::geom_line(data=dat$boundary_F_LV, ggplot2::aes(x=toC(TK), y=p*1e-6), color="blue")
   #g = g + geom_point(data=dat$boundary_F_LV, aes(x=toC(TK), y=p*1e-6), size=1, color="blue")
-  g = g + geom_point(data=dat$cp, aes(x=toC(TK), y=p*1e-6), size=3, shape=21, fill="white")
-  g = g + coord_cartesian(xlim=c(0, TC_range_max), ylim=c(0,150))
-  g = g + xlab("T [°C]") + ylab("p [MPa]")
-  g = g + ggtitle(sprintf("%g wt%% NaCl", dat$massfrac_NaCl*1e2))
+  g = g + ggplot2::geom_point(data=dat$cp, ggplot2::aes(x=toC(TK), y=p*1e-6), size=3, shape=21, fill="white")
+  g = g + ggplot2::coord_cartesian(xlim=c(0, TC_range_max), ylim=c(0,150))
+  g = g + ggplot2::xlab("T [deg. C]") + ggplot2::ylab("p [MPa]")
+  g = g + ggplot2::ggtitle(sprintf("%g wt%% NaCl", dat$massfrac_NaCl*1e2))
 
   print(g)
+}
+
+#' @noRd
+write_lines = function(filename, lines)
+{
+  fileConn <- file(filename, open = "wt")
+  writeLines(lines, fileConn)
+  close(fileConn)
+}
+
+#' @noRd
+append_lines = function(filename, lines)
+{
+  fileConn <- file(filename, open = "at")
+  writeLines(lines, fileConn)
+  close(fileConn)
+}
+
+#' @noRd
+to_TC_pMPa = function(dat)
+{
+  dat$TC = toC(dat$TK)
+  dat$pMPa = dat$p * 1e-6
+  dplyr::select(dat, .data$TC, .data$pMPa)
 }
 
 #' save H2O-NaCl phase relations on T-p space to a text file
@@ -351,30 +380,12 @@ driesner07_H2O_NaCl_plot_phase_relation_on_Tp_space = function(dat, TC_range_max
 #' @param dat H2O-NaCl phase relation information
 #' @param filename Output file name
 #'
+#' @importFrom dplyr select
+#' @importFrom rlang .data
 #' @export
 driesner07_H2O_NaCl_write_phase_relation_on_Tp_space = function(dat, filename)
 {
-  write_lines = function(filename, lines)
-  {
-    fileConn <- file(filename, open = "wt")
-    writeLines(lines, fileConn)
-    close(fileConn)
-  }
-
-  append_lines = function(filename, lines)
-  {
-    fileConn <- file(filename, open = "at")
-    writeLines(lines, fileConn)
-    close(fileConn)
-  }
-
-  to_TC_pMPa = function(dat)
-  {
-    dat$TC = toC(dat$TK)
-    dat$pMPa = dat$p * 1e-6
-    select(dat, TC, pMPa)
-  }
-
+  
   write_lines(filename, sprintf("H2O-NaCl phase relations at %g wt%%NaCl", dat$massfrac_NaCl*1e2))
 
   append_lines(filename, "# LV-VH boundary")
