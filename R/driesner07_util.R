@@ -68,6 +68,7 @@ driesner07_H2O_NaCl_estimate_density_from_M0 <- function(M0)
 #' search possibly multiple intervals of an input argument where
 #' thee returned value of a given function has a different sign
 #'
+#' @noRd
 search_intervals = function(f, p0, p1, n = 100)
 {
   dat = data.frame(p = seq(p0, p1, length.out = n))
