@@ -336,15 +336,16 @@ driesner07_H2O_NaCl_get_phase_relation_on_Tp_space = function(massfrac_NaCl, TC_
 #' @param TC_range_max Maximum temperature to be plotted [K]
 #'
 #' @importFrom ggplot2 ggplot aes geom_line geom_point coord_cartesian xlab ylab ggtitle
+#' @importFrom rlang .data
 #' @export
 driesner07_H2O_NaCl_plot_phase_relation_on_Tp_space = function(dat, TC_range_max = 800)
 {
   g = ggplot2::ggplot()
-  g = g + ggplot2::geom_line(data=dat$boundary_LV_VH, ggplot2::aes(x=toC(TK), y=p*1e-6))
+  g = g + ggplot2::geom_line(data=dat$boundary_LV_VH, ggplot2::aes(x=toC(.data$TK), y=.data$p*1e-6))
   #g = g + geom_point(data=dat$boundary_LV_VH, aes(x=toC(TK), y=p*1e-6), size=1)
-  g = g + ggplot2::geom_line(data=dat$boundary_F_LV, ggplot2::aes(x=toC(TK), y=p*1e-6), color="blue")
+  g = g + ggplot2::geom_line(data=dat$boundary_F_LV, ggplot2::aes(x=toC(.data$TK), y=.data$p*1e-6), color="blue")
   #g = g + geom_point(data=dat$boundary_F_LV, aes(x=toC(TK), y=p*1e-6), size=1, color="blue")
-  g = g + ggplot2::geom_point(data=dat$cp, ggplot2::aes(x=toC(TK), y=p*1e-6), size=3, shape=21, fill="white")
+  g = g + ggplot2::geom_point(data=dat$cp, ggplot2::aes(x=toC(.data$TK), y=.data$p*1e-6), size=3, shape=21, fill="white")
   g = g + ggplot2::coord_cartesian(xlim=c(0, TC_range_max), ylim=c(0,150))
   g = g + ggplot2::xlab("T [deg. C]") + ggplot2::ylab("p [MPa]")
   g = g + ggplot2::ggtitle(sprintf("%g wt%% NaCl", dat$massfrac_NaCl*1e2))
@@ -383,6 +384,7 @@ to_TC_pMPa = function(dat)
 #'
 #' @importFrom dplyr select
 #' @importFrom rlang .data
+#' @importFrom utils write.table
 #' @export
 driesner07_H2O_NaCl_write_phase_relation_on_Tp_space = function(dat, filename)
 {
