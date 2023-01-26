@@ -1,8 +1,8 @@
 Package: geofluidprop
-Version: 1.1
+Version: 1.2
 Type: Package
 Title: R wrapper for the geofluidprop library
-Date: 2023-01-25
+Date: 2023-01-26
 Authors@R: person("Norihiro", "Watanabe", email = "norihiro.watanabe@aist.go.jp",
   role = c("aut", "cre"))
 Maintainer: Norihiro Watanabe <norihiro.watanabe@aist.go.jp>
