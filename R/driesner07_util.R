@@ -1,26 +1,96 @@
 
-
-#' Phase name of H2O-NaCl fluid as a function of temperature, pressure, and NaCl composition
+#' Get H2O-NaCl fluid properties at the given temperature, pressure, and NaCl mass fraction
 #'
 #' @param TK Temeprature [K]
 #' @param p Pressure [Pa]
-#' @param x Bulk composition (mole fraction) of NaCl [mol/mol]
-#' @return phase name
+#' @param X Bulk NaCl mass fraction [kg/kg]
+#' @param print TRUE for printing the calculated properties
+#' @return a nested list object including the fluid properties
 #'
+#' @importFrom utils str
 #' @export
-driesner07_H2O_NaCl_phase_name_Tpx <- function(TK,p,x)
+driesner07_H2O_NaCl_get_properties_TpX <- function(TK,p,X,print=FALSE)
 {
-  phaseid = driesner07_H2O_NaCl_phase_Tpx(TK, p, x)
-  if (phaseid == 0) return("V")
-  if (phaseid == 1) return("VH")
-  if (phaseid == 10) return("L")
-  if (phaseid == 11) return("LH")
-  if (phaseid == 20) return("VL")
-  if (phaseid == 21) return("VLH")
-  if (phaseid == 30) return("F")
-  if (phaseid == 31) return("FH")
-  return(phaseid)
+  x = H2ONaCl_massfrac_to_x(X)
+  prop = list()
+  prop$given_condition = list(
+    TdegC = toC(TK),
+    pMPa = p*1e-6,
+    wtp_NaCl_bulk = X*1e2)
+  Tc = driesner07_H2O_NaCl_Tc_x(x)
+  prop$critical_point = list(TdegC=toC(Tc), pMPa = driesner07_H2O_NaCl_pc_T2(Tc)*1e-6 )
+  prop$phase = driesner07_H2O_NaCl_phase_Tpx(TK,p,x)
+  if (prop$phase %in% c("V","L","F")) # single phase
+  {
+    prop$density = driesner07_H2O_NaCl_rho_singlephase_pTx(p, TK, x)
+    prop$h = driesner07_H2O_NaCl_singlephase_h_Tpx(TK, p, x) * 1e-3
+    prop$H = prop$density * prop$h
+    prop$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(prop$density, TK, x)
+  } else if (prop$phase %in% c("VL")) {
+    xv = driesner07_H2O_NaCl_VL_xv_Tp(TK, p)
+    xl = driesner07_H2O_NaCl_VL_xl_Tp(TK, p)
+    
+    saturation_L = driesner07_H2O_NaCl_VL_vol_frac_l(TK, p, x)
+    mass_fraction_L = driesner07_H2O_NaCl_VL_mass_frac_l(TK, p, x)
+    prop$volume_fraction = list(vapor=1-saturation_L, liquid=saturation_L)
+    prop$mass_fraction = list(vapor=1-mass_fraction_L, liquid=mass_fraction_L)
+    
+    propl = list()
+    propl$wtp_NaCl = H2ONaCl_x_to_massfrac(xl)*1e2
+    propl$density = driesner07_H2O_NaCl_VL_rhol_Tp(TK, p)
+    propl$h = driesner07_H2O_NaCl_singlephase_h_Tpx(TK, p, xl) * 1e-3
+    propl$H = propl$density * propl$h
+    propl$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(propl$density, TK, xl)
+    
+    propv = list()
+    propv$wtp_NaCl = H2ONaCl_x_to_massfrac(xv)*1e2
+    propv$density = driesner07_H2O_NaCl_VL_rhov_Tp(TK, p)
+    propv$h = driesner07_H2O_NaCl_singlephase_h_Tpx(TK, p, xv) * 1e-3
+    propv$H = propv$density * propv$h
+    propv$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(propv$density, TK, xv)
+    
+    propb = list()
+    propb$density = saturation_L*propl$density + (1.-saturation_L)*propv$density
+    propb$h = 0
+    propb$H =  saturation_L*propl$H + (1-saturation_L)*propv$H
+    propb$h = propb$H / propb$density
+    
+    prop$liquid_phase = propl
+    prop$vapor_phase = propv
+    prop$bulk = propb
+    
+  } else if (prop$phase %in% c("VH")) {
+    xv = driesner07_H2O_NaCl_VH_xv_Tp(TK, p)
+    propv = list()
+    propv$wtp_NaCl = H2ONaCl_x_to_massfrac(xv)*1e2
+    propv$density = driesner07_H2O_NaCl_rho_singlephase_pTx(p, TK, xv)
+    propv$h = driesner07_H2O_NaCl_singlephase_h_Tpx(TK, p, xv) * 1e-3
+    propv$H = propv$density * propv$h
+    propv$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(propv$density, TK, xv)
+    
+    prop$vapor_phase = propl
+    
+  } else if (prop$phase %in% c("LH")) {
+    xl = driesner07_H2O_NaCl_LH_xl_Tp(TK, p)
+    propl = list()
+    propl$wtp_NaCl = H2ONaCl_x_to_massfrac(xl)*1e2
+    propl$density = driesner07_H2O_NaCl_rho_singlephase_pTx(p, TK, xl)
+    propl$h = driesner07_H2O_NaCl_singlephase_h_Tpx(TK, p, xl) * 1e-3
+    propl$H = propl$density * propl$h
+    propl$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(propl$density, TK, xl)
+    
+    prop$liquid_phase = propl
+    
+  } else {
+    printf("fluid phase %s is not supported yet\n", prop$phase)
+  }
+  
+  if (print==TRUE)
+    str(prop)
+  
+  prop
 }
+
 
 #' Estimate density from concentration
 #'

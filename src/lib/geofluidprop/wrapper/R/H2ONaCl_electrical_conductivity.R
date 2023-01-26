@@ -193,7 +193,7 @@ H2ONaCl_molar_ec_WatanabeEtAl2021_vism <- function(vis, m)
 H2ONaCl_ec_WatanabeEtAl2021_Tpm <- function(TK, pMPa, m)
 {
   x = H2ONaCl_b_to_x(m)
-  phase = driesner07_H2O_NaCl_phase_name_Tpx(TK, pMPa*1e6, x)
+  phase = driesner07_H2O_NaCl_phase_Tpx(TK, pMPa*1e6, x)
   # if (phase%in%c("VL","VH")) {
   #   printf("invalid TPx condition: phase=%s at TK=%g, p=%g, m=%g \n", phase, TK, pMPa, m)
   #   return(NA)
