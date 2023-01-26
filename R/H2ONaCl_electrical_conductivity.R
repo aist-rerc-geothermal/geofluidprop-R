@@ -3,10 +3,10 @@
 #' H2O-NaCl fluid electrical conductivity model by Sen & Goode (1992)
 #'
 #' The model is valid for 20-200 C.
-#' 
-#' @references Sen, P.N., Goode, P.A. (1992) Influence of temperature on electrical 
-#' conductivity of shaly sands, Geophysics 57 (1), 89–96. 
-#' @references Sen, P.N., Goode, P.A. (1992) Errata, to “influence of temperature on 
+#'
+#' @references Sen, P.N., Goode, P.A. (1992) Influence of temperature on electrical
+#' conductivity of shaly sands, Geophysics 57 (1), 89–96.
+#' @references Sen, P.N., Goode, P.A. (1992) Errata, to “influence of temperature on
 #' electrical conduc- tivity of shaly sands”, Geophysics 57 (12), 1658.
 #'
 #' @param m NaCl molality [mol/kg]
@@ -39,7 +39,7 @@ H2ONaCl_ec_SenGoode1992 <- function(m, TC)
 H2ONaCl_ec_SakumaIchiki2016_highP <- function(p, T, c)
 {
   # MPa, K, wt%
-  
+
   gamma = c(
     -2.76823e-12,
     2.86668e-11,
@@ -76,7 +76,7 @@ H2ONaCl_ec_SakumaIchiki2016_highP <- function(p, T, c)
     beta[ig+1] = gamma[ig*3+1]*c^2 + gamma[ig*3+2]*c + gamma[ig*3+3]
     ig = ig + 1
   }
-  
+
   alpha1 = beta[1]*T^2 + beta[2]*T + beta[3]
   alpha2 = beta[4]*T^2 + beta[5]*T + beta[6]
   alpha3 = beta[7]*T^2 + beta[8]*T + beta[9]
@@ -100,7 +100,7 @@ H2ONaCl_ec_SakumaIchiki2016_highP <- function(p, T, c)
 H2ONaCl_ec_SakumaIchiki2016_lowP <- function(p, TK, c)
 {
   # MPa, K, wt%
-  
+
   phi = c(
     -1.61994e-12,
     4.32808e-11,
@@ -126,7 +126,7 @@ H2ONaCl_ec_SakumaIchiki2016_lowP <- function(p, TK, c)
   delta = 1:5
   for (i in 0:(length(delta)-1))
     delta[i+1] = phi[i*4+1]*c^3 + phi[i*4+2]*c^2 + phi[i*4+3]*c + phi[i*4+4]
-  
+
   s = delta[1]*TK^4 + delta[2]*TK^3 + delta[3]*TK^2 + delta[4]*TK + delta[5]
   s
 }
@@ -174,7 +174,7 @@ H2ONaCl_molar_ec_WatanabeEtAl2021_vism <- function(vis, m)
   coeff[8] = 4.309522921111e-01
   coeff[9] = -4.892452234519e-10
   coeff[10] = -1.753387741372e-11
-  
+
   invvis = 1./vis
   i = 0
   A = coeff[i+1] + (coeff[i+2] - coeff[i+1])/(1+(m/coeff[i+3])^coeff[i+4])
@@ -211,5 +211,48 @@ H2ONaCl_ec_WatanabeEtAl2021_Tpm <- function(TK, pMPa, m)
   s = ms * M *1e3
   #s = max(s, 1e-6)
   if (s<1e-6) s = 1e-6
+  s
+}
+
+#' H2O-NaCl fluid electrical conductivity model for low density conditions in Watanabe et al (2022, Geothermics)
+#'
+#' @param TK Temperature [K]
+#' @param pMPa Pressure [MPa]
+#' @param m NaCl molality [mol/kg-H2O]
+#'
+#' @return Electrical conductivity [S/m]
+#'
+#' @importFrom dplyr filter
+#' @importFrom rlang .data
+#' @importFrom stats lm predict
+#' @export
+H2ONaCl_ec_WatanabeEtAl2022_density_model_Tpm = function(TK, pMPa, m)
+{
+  x = H2ONaCl_b_to_x(m)
+  phase = driesner07_H2O_NaCl_phase_Tpx(TK, pMPa*1e6, x)
+  # if (phase%in%c("VL","VH")) {
+  #   printf("invalid TPx condition: phase=%s at TK=%g, p=%g, m=%g \n", phase, TK, pMPa, m)
+  #   return(NA)
+  # }
+  rho = driesner07_H2O_NaCl_rho_singlephase_pTx(pMPa*1e6, TK, x)
+  if (rho > 450)
+    return(H2ONaCl_ec_WatanabeEtAl2021_Tpm(TK, pMPa, m))
+
+  dat = data.frame(pMPa=seq(20,200,0.1), TK=TK)
+  dat$p = dat$pMPa*1e6
+  dat$phase = mapply(driesner07_H2O_NaCl_phase_Tpx, dat$TK, dat$p, x)
+  dat = dplyr::filter(dat, .data$phase%in%c("F","L","V"))
+  dat$rho = mapply(driesner07_H2O_NaCl_rho_singlephase_pTx, dat$p, dat$TK, x)
+  dat = dplyr::filter(dat, .data$rho>=450, .data$rho<700)
+  if (nrow(dat)==0)
+    return(NA)
+  dat$ec1 = mapply(H2ONaCl_ec_WatanabeEtAl2021_Tpm, dat$TK, dat$pMPa, m)
+
+  rho_model = lm(log10(ec1) ~ rho + I(rho^2)+ I(rho^3), data = dat)
+
+  #print(summary(rho_model))
+  dat2 = data.frame(rho=rho)
+  ret = predict(rho_model, newdata=dat2, interval="prediction")
+  s = 10^ret[1,1]
   s
 }

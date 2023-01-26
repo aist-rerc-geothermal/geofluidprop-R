@@ -18,9 +18,9 @@ Electrical conductivity [S/m]
 The model is valid for 20-200 C.
 }
 \references{
-Sen, P.N., Goode, P.A. (1992) Influence of temperature on electrical 
+Sen, P.N., Goode, P.A. (1992) Influence of temperature on electrical
 conductivity of shaly sands, Geophysics 57 (1), 89–96.
 
-Sen, P.N., Goode, P.A. (1992) Errata, to “influence of temperature on 
+Sen, P.N., Goode, P.A. (1992) Errata, to “influence of temperature on
 electrical conduc- tivity of shaly sands”, Geophysics 57 (12), 1658.
 }
