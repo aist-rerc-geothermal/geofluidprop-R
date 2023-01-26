@@ -12,4 +12,5 @@
 ^\.git$
 ^src/lib/geofluidprop/scripts$
 ^src/lib/geofluidprop/third-party$
+^.*\.pdf
 
