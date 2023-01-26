@@ -1,5 +1,5 @@
 Package: geofluidprop
-Version: 1.2
+Version: 1.3
 Type: Package
 Title: R wrapper for the geofluidprop library
 Date: 2023-01-26
