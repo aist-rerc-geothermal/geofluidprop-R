@@ -3,6 +3,7 @@ The geofluidprop R package: a wrapper for the geofluidprop C library
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/aist-rerc-geothermal/geofluidprop-R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aist-rerc-geothermal/geofluidprop-R/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://zenodo.org/badge/574700977.svg)](https://zenodo.org/badge/latestdoi/574700977)
 <!-- badges: end -->
   
 This is an R wrapper for [`geofluidprop`](https://github.com/aist-rerc-geothermal/geofluidprop). geofluidprop is a C library for computing physical properties of geological fluids.
