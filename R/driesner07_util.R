@@ -68,7 +68,7 @@ driesner07_H2O_NaCl_get_properties_TpX <- function(TK,p,X,print=FALSE)
     propv$H = propv$density * propv$h
     propv$viscosity = klyukinetal2017_H2O_NaCl_viscosity_rhoTx(propv$density, TK, xv)
     
-    prop$vapor_phase = propl
+    prop$vapor_phase = propv
     
   } else if (prop$phase %in% c("LH")) {
     xl = driesner07_H2O_NaCl_LH_xl_Tp(TK, p)
