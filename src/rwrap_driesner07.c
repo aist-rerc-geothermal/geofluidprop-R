@@ -2,6 +2,7 @@
 #include "rwrap_driesner07.h"
 
 #include "model/driesner07/Driesner2007_H2ONaCl.h"
+#include "model/driesner07/Driesner2007_NaCl.h"
 
 
 void R_driesner07_H2O_NaCl_pc_T(double*T, double*out)
@@ -107,4 +108,19 @@ void R_driesner07_H2O_NaCl_rho_singlephase_pTx(double*p, double*T, double*x, dou
 void R_driesner07_H2O_NaCl_singlephase_h_pTx(double*p, double*T, double*x, double*out)
 {
   *out = driesner07_H2O_NaCl_h_singlephase_pTx(*p, *T, *x);
+}
+
+void R_driesner07_NaCl_H_rho_pT(double* p_Pa, double* T_K, double* out)
+{
+  *out = driesner07_NaCl_H_rho_pT(*p_Pa, *T_K);
+}
+
+void R_driesner07_NaCl_H_h_pT(double* p_Pa, double* T_K, double* out)
+{
+  *out = driesner07_NaCl_H_h_pT(*p_Pa, *T_K);
+}
+
+void R_driesner07_NaCl_H_cp_pT(double* p_Pa, double* T_K, double* out)
+{
+  *out = driesner07_NaCl_H_cp_pT(*p_Pa, *T_K);
 }

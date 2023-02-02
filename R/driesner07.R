@@ -408,3 +408,42 @@ driesner07_H2O_NaCl_singlephase_p_rhoTx = function(rho, TK, x, pVL, pmax=500e6)
   ret$root
 }
 
+
+#' calculate halite density
+#'
+#' @param pPa Pressure [Pa]
+#' @param TK Temperature [K]
+#' @return Density [kg/m^3]
+#'
+#' @export
+driesner07_NaCl_H_rho_pT = function(pPa, TK)
+{
+  ret <- .C("R_driesner07_NaCl_H_rho_pT", p=as.double(pPa), TK=as.double(TK), out=as.double(1.0))
+  return(ret$out)
+}
+
+#' calculate halite specific enthalpy
+#'
+#' @param pPa Pressure [Pa]
+#' @param TK Temperature [K]
+#' @return specific enthalpy [J/kg]
+#'
+#' @export
+driesner07_NaCl_H_h_pT = function(pPa, TK)
+{
+  ret <- .C("R_driesner07_NaCl_H_h_pT", p=as.double(pPa), TK=as.double(TK), out=as.double(1.0))
+  return(ret$out)
+}
+
+#' calculate halite specific heat 
+#'
+#' @param pPa Pressure [Pa]
+#' @param TK Temperature [K]
+#' @return specific heat [J/kg/K]
+#'
+#' @export
+driesner07_NaCl_H_cp_pT = function(pPa, TK)
+{
+  ret <- .C("R_driesner07_NaCl_H_cp_pT", p=as.double(pPa), TK=as.double(TK), out=as.double(1.0))
+  return(ret$out)
+}

@@ -49,6 +49,9 @@ static const R_CMethodDef cMethods[] = {
   {"R_driesner07_H2O_NaCl_rho_pTx",          (DL_FUNC) &R_driesner07_H2O_NaCl_rho_pTx,          4, argtype_real4},
   {"R_driesner07_H2O_NaCl_rho_singlephase_pTx",          (DL_FUNC) &R_driesner07_H2O_NaCl_rho_singlephase_pTx,          4, argtype_real4},
   {"R_driesner07_H2O_NaCl_singlephase_h_pTx",            (DL_FUNC) &R_driesner07_H2O_NaCl_singlephase_h_pTx,            4, argtype_real4},
+  {"R_driesner07_NaCl_H_rho_pT",        (DL_FUNC) &R_driesner07_NaCl_H_rho_pT,        3, argtype_real3},
+  {"R_driesner07_NaCl_H_h_pT",        (DL_FUNC) &R_driesner07_NaCl_H_h_pT,        3, argtype_real3},
+  {"R_driesner07_NaCl_H_cp_pT",        (DL_FUNC) &R_driesner07_NaCl_H_cp_pT,        3, argtype_real3},
   {"R_klyukinetal2017_H2O_NaCl_viscosity_rhoTx",  (DL_FUNC) &R_klyukinetal2017_H2O_NaCl_viscosity_rhoTx,  4, argtype_real4},
   {NULL, NULL, 0, NULL}
 };

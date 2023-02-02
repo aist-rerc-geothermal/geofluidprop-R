@@ -24,4 +24,8 @@ void R_driesner07_H2O_NaCl_rho_pTx(double*p, double*T, double*x, double*out);
 void R_driesner07_H2O_NaCl_rho_singlephase_pTx(double*p, double*T, double*x, double*out);
 void R_driesner07_H2O_NaCl_singlephase_h_pTx(double*p, double*T, double*x, double*out);
 
+void R_driesner07_NaCl_H_rho_pT(double* p_Pa, double* T_K, double* out);
+void R_driesner07_NaCl_H_h_pT(double* p_Pa, double* T_K, double* out);
+void R_driesner07_NaCl_H_cp_pT(double* p_Pa, double* T_K, double* out);
+
 #endif
