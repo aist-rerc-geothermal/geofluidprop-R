@@ -543,7 +543,7 @@ static double tsat(double pres)
 
 		if (fabs(1.0 - pp / pres) < 1.0e-5) break;
 
-		tg *= 1, 0 + (pres - pp) / dp;
+		tg *= 1.0 + (pres - pp) / dp;
 	}
 
 
