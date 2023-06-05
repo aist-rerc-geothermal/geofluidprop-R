@@ -1,0 +1,3 @@
+[submodule "src/lib/geofluidprop"]
+	path = src/lib/geofluidprop
+	url = git@github.com:aist-rerc-geothermal/geofluidprop.git
